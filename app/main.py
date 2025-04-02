@@ -6,7 +6,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.middleware.cors import CORSMiddleware
 
-from app.auth import authenticate_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+from app.auth import authenticate_user, create_access_token
 from app.config import settings
 from app.database import create_db_and_tables, get_session
 from app.middleware import TimingMiddleware, LoggingMiddleware, RateLimitingMiddleware
@@ -58,7 +58,7 @@ async def login_for_access_token(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )

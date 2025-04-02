@@ -37,10 +37,10 @@ class UserCreate(UserSchema):
 
 
 class UserUpdate(BaseModel):
-    username: str
-    email: str
-    first_name: str
-    last_name: str
+    username: str = None
+    email: str = None
+    first_name: str = None
+    last_name: str = None
     bio: Optional[str] = None
     profile_picture: Optional[str] = None
     role: Optional[UserRole] = None
