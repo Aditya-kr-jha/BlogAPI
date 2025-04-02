@@ -4,9 +4,28 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from app.config import settings
 
-connect_args = {"check_same_thread": False}
+# Get database URL from settings
+db_url = settings.DATABASE_URL
+
+# Handle the postgres:// to postgresql:// conversion needed for some services like Render
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+# Set connection arguments based on database type
+connect_args = {}
+if db_url.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}  # Only needed for SQLite
+
+# Create engine with appropriate settings
 engine = create_engine(
-    settings.DATABASE_URL, echo=settings.ECHO, connect_args=connect_args
+    db_url,
+    echo=settings.ECHO,
+    connect_args=connect_args,
+    # Optional PostgreSQL-specific settings (uncomment if needed)
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,
+    pool_recycle=1800,
 )
 
 
