@@ -49,7 +49,7 @@ async def root():
 
 @app.post("/token", response_model=Token)
 async def login_for_access_token(
-        form_data: OAuth2PasswordRequestForm = Depends(), session=Depends(get_session)
+    form_data: OAuth2PasswordRequestForm = Depends(), session=Depends(get_session)
 ):
     user = authenticate_user(form_data.username, form_data.password, session)
     if not user:
@@ -67,4 +67,4 @@ async def login_for_access_token(
 
 # start FastAPI application server
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=settings.RELOAD)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=settings.RELOAD)
